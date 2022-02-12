@@ -9,6 +9,7 @@ function assert(expr, label) {
 const GRID_SIZE = 40;
 const RESULT_COLOR = 'green';
 const ANNOTATION_COLOR = 'purple';
+const DECIMALS_SEPARATOR = ',';
 
 function createGridPattern(id='grid', side=20, strokeWidth=1, stroke='rgb(220, 220, 220)',) {
     const W = side;
@@ -54,9 +55,8 @@ if (!sumParam || sumParam === '' || sumParam === null) {
     searchParams.set('sum', '533,819');
     location.search = searchParams.toString(); // reloads page
 }
-const params = sumParam.split(',').map(n => parseInt(n, 10));
-console.warn('summing', params);
-const tmp = sum(params);
+console.warn('summing', sumParam.split(','));
+const tmp = sum(sumParam.split(','));
 
 const comp = {
     cells: tmp.cells,
@@ -81,6 +81,12 @@ const comp = {
     }
 }
 
+
+function numDecimals(numS) {
+    let decimals = numS.split('.')[1];
+    return decimals ? decimals.length : 0;
+}
+
 /*
 533 + 819
 
@@ -96,9 +102,16 @@ function sum(numbers) {
     const cells = [];
     const lines = [];
 
-    const invertedDigits = numbers.map(num => {
-        const arr = num.toString().split('').reverse();
-        return arr.map(s => parseInt(s, 10));
+    const maxNumDecimals = numbers.reduce((prev, v)=> Math.max(prev, numDecimals(v)), 0);
+
+    const invertedDigits = numbers.map(numS => {
+        const numDecs = numDecimals(numS);
+        numS = numS.replace('.', '');
+        const arr = numS.split('').reverse();
+        for (let i = 0; i < maxNumDecimals - numDecs; ++i) {
+            arr.unshift(undefined);
+        }
+        return arr.map(s => s === undefined ? undefined : parseInt(s, 10));
     });
 
     const numDigits = Math.max(... invertedDigits.map(id => id.length) );
@@ -151,13 +164,29 @@ function sum(numbers) {
         });
     }
 
+    if (maxNumDecimals > 0) {
+        for (let i = 0; i < numbers.length; ++i) {
+            if (numbers[i].includes('.')) {
+                cells.push({
+                    value: DECIMALS_SEPARATOR,
+                    pos: [0.5-maxNumDecimals, i],
+                });
+            }
+        }
+        cells.push({
+            value: DECIMALS_SEPARATOR,
+            pos: [0.5-maxNumDecimals, numbers.length],
+            fill: RESULT_COLOR
+        });
+    }
+
     cells.push({
         value: '+',
         pos: [-numDigits, numbers.length-1],
     });
 
     lines.push({
-        x1: -numDigits+1,
+        x1: -numDigits,
         x2: 1,
         y1: numbers.length,
         y2: numbers.length,
@@ -189,7 +218,5 @@ function sum(numbers) {
 
     return {cells, lines, viewBoxParts, viewBox};
 }
-
-//sum([23, 111]);
 
 m.mount(document.body.querySelector('main'), comp);
