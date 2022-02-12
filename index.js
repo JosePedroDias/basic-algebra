@@ -28,7 +28,8 @@ function createGridPattern(id='grid', side=20, strokeWidth=1, stroke='rgb(220, 2
 function createNumber(text, [x, y], scale=1, fill) {
     return m('text', {
         x: (x+0.5)*GRID_SIZE,
-        y: (y+0.55)*GRID_SIZE,
+        y: (y+0.5)*GRID_SIZE,
+        dy: GRID_SIZE*0.25*scale,
         'font-size': GRID_SIZE*0.75*scale,
         fill: fill
     }, text);

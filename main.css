@@ -10,7 +10,6 @@ body {
 svg {
     shape-rendering: crispEdges;
     text-anchor: middle;
-    dominant-baseline: middle;
     position: absolute;
     left: 50%;
     top:  50%;
