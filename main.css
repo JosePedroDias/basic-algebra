@@ -1,0 +1,10 @@
+body {
+    font-family: sans-serif;
+}
+
+svg {
+    shape-rendering: crispEdges;
+    text-anchor: middle;
+    /*alignment-baseline: middle;*/
+    dominant-baseline: middle;
+}
