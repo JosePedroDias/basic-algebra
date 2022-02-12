@@ -2,7 +2,7 @@
 
 apply basic algebra for operations and draw them as SVGs
 
-- [ ] sum
+- [x] sum
 - [ ] subtraction
 - [ ] multiplication
 - [ ] division
