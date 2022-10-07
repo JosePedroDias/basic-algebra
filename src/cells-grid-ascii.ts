@@ -1,4 +1,4 @@
-import { Cell, Line, ViewBox } from './basic-algebra';
+import { Cell } from './basic-algebra';
 
 function updateLimit(n: number, limits: [number, number]) {
   const [m, M] = limits;
@@ -6,12 +6,7 @@ function updateLimit(n: number, limits: [number, number]) {
   if (n > M && n % 1 === 0) limits[1] = n;
 }
 
-export function cellsGridAscii(o: {
-  cells: Cell[];
-  lines: Line[];
-  viewBox: ViewBox;
-}): string[] {
-  const cells = o.cells;
+export function cellsGridAscii(cells: Cell[] /*, lines: Line[]*/): string[] {
   const limits: { [label: string]: [number, number] } = {
     x: [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
     y: [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
@@ -28,7 +23,7 @@ export function cellsGridAscii(o: {
   //console.log(limits);
   //console.log(values);
 
-  const lines: string[] = [];
+  const outputLines: string[] = [];
   for (let y = limits.y[0]; y <= limits.y[1]; ++y) {
     const line: string[] = [];
     for (let x = limits.x[0]; x <= limits.x[1]; ++x) {
@@ -36,10 +31,10 @@ export function cellsGridAscii(o: {
       //console.log(x, y, v, typeof v, JSON.stringify(v));
       line.push(v as string);
     }
-    lines.push(line.join(''));
+    outputLines.push(line.join(''));
   }
 
-  //console.log(lines.join('\n'));
-  //return '\n' + lines.join('\n');
-  return lines;
+  //console.log(outputLines.join('\n'));
+  //return '\n' + outputLines.join('\n');
+  return outputLines;
 }

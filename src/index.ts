@@ -7,8 +7,8 @@ if (!sumParam || sumParam === '' || sumParam === null) {
   searchParams.set('sum', '533,819');
   location.search = searchParams.toString();
 } else {
-  console.warn('summing', sumParam.split(','));
-  const result = sum(sumParam.split(','));
   const mainEl = document.body.querySelector('main');
-  mainEl && mount(mainEl, cellsGrid(result));
+  console.warn('summing', sumParam.split(','));
+  const { cells, lines } = sum(sumParam.split(','));
+  mainEl && mount(mainEl, cellsGrid(cells, lines));
 }

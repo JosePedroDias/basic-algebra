@@ -1,5 +1,10 @@
 import { default as m, Component } from 'mithril';
-import { GRID_SIZE, Cell, Line, ViewBox } from './basic-algebra';
+import {
+  GRID_SIZE,
+  Cell,
+  Line,
+  extractViewBoxFromCells,
+} from './basic-algebra';
 
 function createGridPattern(
   id = 'grid',
@@ -65,36 +70,28 @@ function createLine(
   });
 }
 
-export function cellsGrid(o: {
-  cells: Cell[];
-  lines: Line[];
-  viewBox: ViewBox;
-}): Component {
+export function cellsGrid(cells: Cell[], lines: Line[]): Component {
+  const viewBox = extractViewBoxFromCells(cells);
   return {
-    // @ts-ignore
-    cells: o.cells,
-    lines: o.lines,
     view() {
       return m(
         'svg',
         {
-          viewBox: o.viewBox.join(' '),
+          viewBox: viewBox.join(' '),
         },
         [
           m('defs', [createGridPattern('grid', GRID_SIZE, 1)]),
           m('rect', {
-            x: o.viewBox[0],
-            y: o.viewBox[1],
-            width: o.viewBox[2],
-            height: o.viewBox[3],
+            x: viewBox[0],
+            y: viewBox[1],
+            width: viewBox[2],
+            height: viewBox[3],
             fill: 'url(#grid)',
           }),
-          // @ts-ignore
-          ...this.cells.map((c: Cell) =>
+          ...cells.map((c: Cell) =>
             createNumber(c.value as string, c.pos, c.scale || 1, c.fill as any),
           ),
-          // @ts-ignore
-          ...this.lines.map((l: Line) =>
+          ...lines.map((l: Line) =>
             createLine(
               [l.x1, l.y1],
               [l.x2, l.y2],
