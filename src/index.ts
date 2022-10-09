@@ -1,14 +1,27 @@
 import { mount } from 'mithril';
-import { sum, cellsGrid } from './basic-algebra';
+import { cellsGrid } from './cells-grid';
+import { sum } from './sum';
+import { subtract } from './subtract';
 
 const searchParams = new URLSearchParams(location.search);
-const sumParam = searchParams.get('sum');
-if (!sumParam || sumParam === '' || sumParam === null) {
+const sumParams = searchParams.get('sum');
+const subParams = searchParams.get('sub');
+let op:Function = () => {};
+let params:string = '';
+if (sumParams) {
+  op = sum;
+  params = sumParams;
+}
+else if (subParams) {
+  op = subtract;
+  params = subParams;
+}
+else {
   searchParams.set('sum', '533,819');
   location.search = searchParams.toString();
-} else {
-  const mainEl = document.body.querySelector('main');
-  console.warn('summing', sumParam.split(','));
-  const { cells, lines } = sum(sumParam.split(','));
-  mainEl && mount(mainEl, cellsGrid(cells, lines));
+  // TODO DOES REFRESH?
 }
+
+const mainEl = document.body.querySelector('main');
+const { cells, lines } = op(params.split(','));
+mainEl && mount(mainEl, cellsGrid(cells, lines));

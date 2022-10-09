@@ -88,6 +88,3 @@ export function getInvertedDigits(
 export function getNumDigits(invertedDigits: InvertedDigits[]) {
   return Math.max(...invertedDigits.map((id) => id.length));
 }
-
-export { cellsGrid } from './cells-grid.js';
-export { sum } from './sum.js';
