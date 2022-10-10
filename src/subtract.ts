@@ -35,7 +35,7 @@ export function subtract(addends: string[]): {
     // x (right to left)
     for (let i = 0; i < addends.length; ++i) {
       // y (up to down)
-      const v = invertedDigits[i][d];// || 0;
+      const v = invertedDigits[i][d];
       if (v === undefined) continue;
       cells.push({
         value: v,

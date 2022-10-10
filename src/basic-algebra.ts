@@ -72,7 +72,7 @@ export type InvertedDigits = (number | undefined)[];
 
 export function getInvertedDigits(
   numbers: string[],
-  maxNumDecimals: number,
+  maxNumDecimals: number = 0,
 ): InvertedDigits[] {
   return numbers.map((numS: string) => {
     const numDecs = numDecimals(numS);

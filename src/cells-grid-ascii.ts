@@ -9,8 +9,8 @@ function updateLimit(n: number, limits: [number, number]) {
 const DIVIDER_HOR = '=';
 const DIVIDER_VER = '|';
 
-const regexL = new RegExp('[-+=|0-9\.,]');
-const regexC = new RegExp('[-+|0-9\.,]');
+const regexL = new RegExp('[-+x=|0-9\.,]');
+const regexC = new RegExp('[-+x|0-9\.,]');
 
 function dropWhitespace(lines_:string[]):string[] {
   const lines = lines_.filter(l => regexL.test(l));
