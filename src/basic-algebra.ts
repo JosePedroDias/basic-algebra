@@ -70,6 +70,54 @@ export function getNumDecimals(numbers: string[]): number {
 
 export type InvertedDigits = (number | undefined)[];
 
+export function arrayToNum(arr:number[], startIndex:number=0, len:number):number {
+  let n = 0;
+  let i = 0;
+  let v;
+  while ((v = arr[i + startIndex]) !== undefined && (i < len)) {
+    n += (v as any as number) * Math.pow(10, len - i - 1);
+    ++i;
+  }
+  if (i === 0) {
+    throw new Error('not found');
+  }
+  return n;
+}
+
+export function numToArray(num:number):number[] {
+  return String(num).split('').map(n => parseInt(n, 10));
+}
+
+export function getKey(i:number, j:number):string {
+  return `${i},${j}`;
+}
+
+export function mapToNum(map:Map<string, number>, y:number, startIndex:number=0, len:number):number {
+  let n = 0;
+  let i = 0;
+  let v;
+  while ((v = map.get(getKey(y, i + startIndex))) !== undefined && (i < len)) {
+    n += (v as any as number) * Math.pow(10, len - i - 1);
+    ++i;
+  }
+  return n;
+}
+
+export function getDigits(
+  numbers: string[],
+  maxNumDecimals: number = 0,
+): InvertedDigits[] {
+  return numbers.map((numS: string) => {
+    const numDecs = numDecimals(numS);
+    numS = numS.replace('.', '');
+    const arr = numS.split('');
+    for (let i = 0; i < maxNumDecimals - numDecs; ++i) {
+      arr.push(undefined as any as string);
+    }
+    return arr.map((s) => (s === undefined ? undefined : parseInt(s, 10)));
+  });
+}
+
 export function getInvertedDigits(
   numbers: string[],
   maxNumDecimals: number = 0,
@@ -87,4 +135,9 @@ export function getInvertedDigits(
 
 export function getNumDigits(invertedDigits: InvertedDigits[]) {
   return Math.max(...invertedDigits.map((id) => id.length));
+}
+
+export function nthFromEnd(arr:number[], n:number):number|undefined {
+  const l = arr.length - 1;
+  return arr[l - n];
 }
