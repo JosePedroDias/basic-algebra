@@ -13,7 +13,7 @@ import {
   nthFromEnd
 } from './basic-algebra';
 
-export function divide(divs:string[]): {
+export function divide(divs:string[], options: { maxIterations: number } = { maxIterations: 10 }): {
   cells: Cell[];
   lines: Line[];
 } {
@@ -27,6 +27,8 @@ export function divide(divs:string[]): {
     zeroError = divs[0] === '0' ? 'zero over zero is undefined' : 'something over zero results in infinity';
   }
   assert(zeroError === undefined, zeroError as string);
+
+  const { maxIterations } = options;
 
   const individualNumDecimals = divs.map(numDecimals);
 
@@ -46,7 +48,7 @@ export function divide(divs:string[]): {
   let candidate;
   let periodLength = 0;
 
-  let maxIterations = 10;
+  //let maxIterations = 10;
   const rests:number[] = [];
 
   candidate = arrayToNum(dividend, cutFrom, cutLen);
