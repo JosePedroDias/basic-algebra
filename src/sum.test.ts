@@ -86,13 +86,13 @@ describe('sum', () => {
 
 const NUM = 100;
 
-function expectedSum(a_:string, b_:string) {
+function expectedSum(a_: string, b_: string) {
   const a = parseFloat(a_);
   const b = parseFloat(b_);
   return parseFloat((a + b).toFixed(3));
 }
 
-function generateEntry() : [string, string, number] {
+function generateEntry(): [string, string, number] {
   const a = randomParam(1 + randomInt(3), randomInt(2) ? 1 + randomInt(3) : 0);
   const b = randomParam(1 + randomInt(3), randomInt(2) ? 1 + randomInt(3) : 0);
   const res = expectedSum(a, b);
@@ -102,7 +102,10 @@ function generateEntry() : [string, string, number] {
 describe('sum brute force', () => {
   const entries = new Array(NUM).fill(1).map(generateEntry);
   it.each(entries)(`add(%f, %f) -> %f`, (a, b, expected) => {
-    const resS = cellsGridAscii(sum([a, b])).pop()?.replace(',', '.').trim();
+    const resS = cellsGridAscii(sum([a, b]))
+      .pop()
+      ?.replace(',', '.')
+      .trim();
     const res = parseFloat(resS || '0');
     expect(res).toBeCloseTo(expected, 3);
   });

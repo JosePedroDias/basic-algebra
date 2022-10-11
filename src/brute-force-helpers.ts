@@ -6,15 +6,15 @@ function randomNonZeroDigit() {
   return 1 + Math.floor(9 * Math.random());
 }
 
-export function randomInt(n:number):number {
+export function randomInt(n: number): number {
   return Math.floor(n * Math.random());
 }
 
-export function randomParam(numLeftDigits:number, numDecimals:number) {
+export function randomParam(numLeftDigits: number, numDecimals: number) {
   const digits = [];
 
   for (let i = 0; i < numLeftDigits; ++i) {
-    digits.push( i === 0 ? randomNonZeroDigit() : randomDigit() );
+    digits.push(i === 0 ? randomNonZeroDigit() : randomDigit());
   }
   if (numLeftDigits === 0) {
     digits.push(0);
@@ -23,7 +23,7 @@ export function randomParam(numLeftDigits:number, numDecimals:number) {
   if (numDecimals) {
     digits.push('.');
     for (let i = 0; i < numDecimals; ++i) {
-      digits.push( i === numDecimals - 1 ? randomNonZeroDigit() : randomDigit() );
+      digits.push(i === numDecimals - 1 ? randomNonZeroDigit() : randomDigit());
     }
   }
 

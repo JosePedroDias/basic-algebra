@@ -70,11 +70,11 @@ export function getNumDecimals(numbers: string[]): number {
 
 export type InvertedDigits = (number | undefined)[];
 
-export function arrayToNum(arr:number[], startIndex:number=0, len:number):number {
+export function arrayToNum(arr: number[], startIndex = 0, len: number): number {
   let n = 0;
   let i = 0;
   let v;
-  while ((v = arr[i + startIndex]) !== undefined && (i < len)) {
+  while ((v = arr[i + startIndex]) !== undefined && i < len) {
     n += (v as any as number) * Math.pow(10, len - i - 1);
     ++i;
   }
@@ -84,19 +84,26 @@ export function arrayToNum(arr:number[], startIndex:number=0, len:number):number
   return n;
 }
 
-export function numToArray(num:number):number[] {
-  return String(num).split('').map(n => parseInt(n, 10));
+export function numToArray(num: number): number[] {
+  return String(num)
+    .split('')
+    .map((n) => parseInt(n, 10));
 }
 
-export function getKey(i:number, j:number):string {
+export function getKey(i: number, j: number): string {
   return `${i},${j}`;
 }
 
-export function mapToNum(map:Map<string, number>, y:number, startIndex:number=0, len:number):number {
+export function mapToNum(
+  map: Map<string, number>,
+  y: number,
+  startIndex = 0,
+  len: number,
+): number {
   let n = 0;
   let i = 0;
   let v;
-  while ((v = map.get(getKey(y, i + startIndex))) !== undefined && (i < len)) {
+  while ((v = map.get(getKey(y, i + startIndex))) !== undefined && i < len) {
     n += (v as any as number) * Math.pow(10, len - i - 1);
     ++i;
   }
@@ -105,7 +112,7 @@ export function mapToNum(map:Map<string, number>, y:number, startIndex:number=0,
 
 export function getDigits(
   numbers: string[],
-  maxNumDecimals: number = 0,
+  maxNumDecimals = 0,
 ): InvertedDigits[] {
   return numbers.map((numS: string) => {
     const numDecs = numDecimals(numS);
@@ -120,7 +127,7 @@ export function getDigits(
 
 export function getInvertedDigits(
   numbers: string[],
-  maxNumDecimals: number = 0,
+  maxNumDecimals = 0,
 ): InvertedDigits[] {
   return numbers.map((numS: string) => {
     const numDecs = numDecimals(numS);
@@ -137,7 +144,7 @@ export function getNumDigits(invertedDigits: InvertedDigits[]) {
   return Math.max(...invertedDigits.map((id) => id.length));
 }
 
-export function nthFromEnd(arr:number[], n:number):number|undefined {
+export function nthFromEnd(arr: number[], n: number): number | undefined {
   const l = arr.length - 1;
   return arr[l - n];
 }

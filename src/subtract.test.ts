@@ -34,7 +34,9 @@ describe('subtract', () => {
     ]));
 
   it('if A < B throws', () =>
-    expect(() => subtract(['23', '36'])).toThrowError('A must not be less than B. invert params and change the sign after result'));
+    expect(() => subtract(['23', '36'])).toThrowError(
+      'A must not be less than B. invert params and change the sign after result',
+    ));
   it('diff than 2 addends throws', () =>
     expect(() => subtract(['5', '2', '1'])).toThrowError(
       'subtraction expects 2 numbers',
@@ -49,13 +51,13 @@ describe('subtract', () => {
 
 const NUM = 100;
 
-function expectedSub(a_:string, b_:string) {
+function expectedSub(a_: string, b_: string) {
   const a = parseFloat(a_);
   const b = parseFloat(b_);
   return parseFloat((a - b).toFixed(3));
 }
 
-function generateEntry() : [string, string, number] {
+function generateEntry(): [string, string, number] {
   const a = randomParam(1 + randomInt(3), randomInt(2) ? 1 + randomInt(3) : 0);
   let b;
   do {
@@ -68,7 +70,10 @@ function generateEntry() : [string, string, number] {
 describe('subtract brute force', () => {
   const entries = new Array(NUM).fill(1).map(generateEntry);
   it.each(entries)(`subtract(%f, %f) -> %f`, (a, b, expected) => {
-    const resS = cellsGridAscii(subtract([a, b])).pop()?.replace(',', '.').trim();
+    const resS = cellsGridAscii(subtract([a, b]))
+      .pop()
+      ?.replace(',', '.')
+      .trim();
     const res = parseFloat(resS || '0');
     expect(res).toBeCloseTo(expected, 3);
   });

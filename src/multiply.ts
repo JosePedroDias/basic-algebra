@@ -6,12 +6,12 @@ import {
   Line,
   getInvertedDigits,
   getNumDigits,
-  numDecimals
+  numDecimals,
 } from './basic-algebra';
 
 import { sum } from './sum';
 
-export function multiply(factors:string[]): {
+export function multiply(factors: string[]): {
   cells: Cell[];
   lines: Line[];
 } {
@@ -26,14 +26,14 @@ export function multiply(factors:string[]): {
   const invertedDigits = getInvertedDigits(factors);
   const numDigits = getNumDigits(invertedDigits);
 
-  const cells:Cell[] = [];
-  const lines:Line[] = [];
+  const cells: Cell[] = [];
+  const lines: Line[] = [];
 
   for (let d = 0; d < numDigits; ++d) {
     // x (right to left)
     for (let i = 0; i < 2; ++i) {
       // y (up to down)
-      const v = invertedDigits[i][d];// || 0;
+      const v = invertedDigits[i][d]; // || 0;
       if (v === undefined) continue;
       cells.push({
         value: v,
@@ -68,14 +68,14 @@ export function multiply(factors:string[]): {
   const invA = invertedDigits[1];
   const invB = invertedDigits[0];
 
-  const sumArgs:number[][] = new Array(invA.length).fill(1).map(() => []);
+  const sumArgs: number[][] = new Array(invA.length).fill(1).map(() => []);
 
   for (let iA = 0; iA < invA.length; ++iA) {
     carries = 0;
     for (let iB = 0; iB < invB.length; ++iB) {
       const a = invA[iA] as number;
       const b = invB[iB] as number;
-      let v_ = a * b + carries;
+      const v_ = a * b + carries;
       const v = v_ % 10;
       carries = Math.floor(v_ / 10);
       sumArgs[iA].push(v);
@@ -94,7 +94,7 @@ export function multiply(factors:string[]): {
       cells.push({
         value: res[i],
         pos: [-i, 2],
-        fill: RESULT_COLOR
+        fill: RESULT_COLOR,
       });
     }
 
@@ -107,31 +107,34 @@ export function multiply(factors:string[]): {
     }
 
     return { cells, lines };
-  }
-  else {
+  } else {
     const toDelete = new Set<string>();
-    for (let i = 0; i < numSumLines; ++i) { // i ~ y
-      for (let j = 0; j < i; ++j) { // j ~ x
+    for (let i = 0; i < numSumLines; ++i) {
+      // i ~ y
+      for (let j = 0; j < i; ++j) {
+        // j ~ x
         sumArgs[i].unshift(0);
         toDelete.add(`${i + 2},${-j}`);
       }
     }
-  
-    const sumArgs2 = sumArgs.map(sa => sa.reverse().join('') );
-  
-    const { cells: cells2, lines: lines2 } = sum(sumArgs2, { skipAnnotations: true });
 
-    cells2.forEach(c => {
+    const sumArgs2 = sumArgs.map((sa) => sa.reverse().join(''));
+
+    const { cells: cells2, lines: lines2 } = sum(sumArgs2, {
+      skipAnnotations: true,
+    });
+
+    cells2.forEach((c) => {
       c.pos[1] += 2;
       if (toDelete.has(`${c.pos[1]},${c.pos[0]}`)) {
         c.value = undefined as any;
       }
     });
-    lines2.forEach(l => {
+    lines2.forEach((l) => {
       l.y1 += 2;
       l.y2 += 2;
     });
-  
+
     if (sumDecimalPlaces > 0) {
       cells.push({
         value: DECIMALS_SEPARATOR,
@@ -139,10 +142,10 @@ export function multiply(factors:string[]): {
         fill: RESULT_COLOR,
       });
     }
-    
+
     return {
       cells: [...cells, ...cells2],
-      lines: [...lines, ...lines2]
+      lines: [...lines, ...lines2],
     };
   }
 }

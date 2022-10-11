@@ -21,7 +21,10 @@ export function subtract(addends: string[]): {
     assert((n as any as number) >= 0, 'negative number is unsupported');
   }
   assert(addends.length === 2, 'subtraction expects 2 numbers');
-  assert(parseFloat(addends[0]) >= parseFloat(addends[1]), 'A must not be less than B. invert params and change the sign after result');
+  assert(
+    parseFloat(addends[0]) >= parseFloat(addends[1]),
+    'A must not be less than B. invert params and change the sign after result',
+  );
 
   const cells: Cell[] = [];
   const lines: Line[] = [];
@@ -50,8 +53,7 @@ export function subtract(addends: string[]): {
     if (localDiff < 0) {
       localDiff += 10;
       carries = 1;
-    }
-    else {
+    } else {
       carries = 0;
     }
 

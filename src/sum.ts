@@ -12,7 +12,10 @@ import {
   getNumDigits,
 } from './basic-algebra';
 
-export function sum(addends: string[], options: { skipAnnotations?: boolean } = {}): {
+export function sum(
+  addends: string[],
+  options: { skipAnnotations?: boolean } = {},
+): {
   cells: Cell[];
   lines: Line[];
 } {

@@ -9,14 +9,14 @@ function updateLimit(n: number, limits: [number, number]) {
 const DIVIDER_HOR = '=';
 const DIVIDER_VER = '|';
 
-const regexL = new RegExp('[-+x()=|0-9\.,]');
-const regexC = new RegExp('[-+x()|0-9\.,]');
+const regexL = new RegExp('[-+x()=|0-9.,]');
+const regexC = new RegExp('[-+x()|0-9.,]');
 
-function dropWhitespace(lines_:string[]):string[] {
-  const lines = lines_.filter(l => regexL.test(l));
+function dropWhitespace(lines_: string[]): string[] {
+  const lines = lines_.filter((l) => regexL.test(l));
   const h = lines.length;
   let w = lines[0].length;
-  for (let x = w-1; x >= 0; --x) {
+  for (let x = w - 1; x >= 0; --x) {
     let skip = true;
     for (let y = 0; y < h; ++y) {
       if (regexC.test(lines[y][x] || '')) {
@@ -25,7 +25,7 @@ function dropWhitespace(lines_:string[]):string[] {
     }
     if (skip) {
       for (let y = 0; y < h; ++y) {
-        lines[y] = `${lines[y].substring(0, x)}${lines[y].substring(x+1)}`;
+        lines[y] = `${lines[y].substring(0, x)}${lines[y].substring(x + 1)}`;
       }
       --w;
     }
@@ -33,7 +33,7 @@ function dropWhitespace(lines_:string[]):string[] {
   return lines;
 }
 
-export function cellsGridAscii(o: { cells: Cell[], lines: Line[] }): string[] {
+export function cellsGridAscii(o: { cells: Cell[]; lines: Line[] }): string[] {
   const { cells, lines } = o;
   const limits: { [label: string]: [number, number] } = {
     x: [Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
@@ -50,16 +50,15 @@ export function cellsGridAscii(o: { cells: Cell[], lines: Line[] }): string[] {
 
   for (const l of lines) {
     if ((l.x1 * 2) % 1 !== 0 || (l.y1 * 2) % 1 !== 0) continue;
-    
+
     if (l.x1 === l.x2) {
       for (let y = l.y1; y <= l.y2; y += 0.5) {
-        const key = [l.x1-0.5, y].join(',');
+        const key = [l.x1 - 0.5, y].join(',');
         values.set(key, DIVIDER_VER);
       }
-    }
-    else if (l.y1 === l.y2) {
+    } else if (l.y1 === l.y2) {
       for (let x = l.x1; x <= l.x2; x += 0.5) {
-        const key = [x, l.y1-0.5].join(',');
+        const key = [x, l.y1 - 0.5].join(',');
         values.set(key, DIVIDER_HOR);
       }
     }

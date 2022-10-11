@@ -10,10 +10,13 @@ import {
   numToArray,
   getKey,
   mapToNum,
-  nthFromEnd
+  nthFromEnd,
 } from './basic-algebra';
 
-export function divide(divs:string[], options: { maxIterations: number } = { maxIterations: 10 }): {
+export function divide(
+  divs: string[],
+  options: { maxIterations: number } = { maxIterations: 10 },
+): {
   cells: Cell[];
   lines: Line[];
 } {
@@ -24,7 +27,10 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
   assert(divs.length === 2, 'division expects 2 numbers');
   let zeroError;
   if (divs[1] === '0') {
-    zeroError = divs[0] === '0' ? 'zero over zero is undefined' : 'something over zero results in infinity';
+    zeroError =
+      divs[0] === '0'
+        ? 'zero over zero is undefined'
+        : 'something over zero results in infinity';
   }
   assert(zeroError === undefined, zeroError as string);
 
@@ -34,9 +40,9 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
 
   const digits = getDigits(divs);
 
-  const dividend = digits[0] as number[];//[5,6];
+  const dividend = digits[0] as number[]; //[5,6];
   const divisor = digits[1] as number[];
-  const quotient:number[] = [];
+  const quotient: number[] = [];
   const rest = new Map<string, number>();
   let numIterations = 0;
   const originalDividendLength = dividend.length;
@@ -49,7 +55,7 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
   let periodLength = 0;
 
   //let maxIterations = 10;
-  const rests:number[] = [];
+  const rests: number[] = [];
 
   candidate = arrayToNum(dividend, cutFrom, cutLen);
   while (candidate < divisorAll) {
@@ -58,7 +64,7 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
   }
 
   let q = Math.floor(candidate / divisorAll);
-  let r = candidate - q*divisorAll;
+  let r = candidate - q * divisorAll;
   rests.push(r);
   let rr = numToArray(r);
   //console.log({ cutFrom, cutLen });
@@ -73,7 +79,10 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
   ++numIterations;
   cutFrom = cutFrom + cutLen;
 
-  while (numIterations < maxIterations && (rests[rests.length-1] !== 0 || numIterations < originalDividendLength)) {
+  while (
+    numIterations < maxIterations &&
+    (rests[rests.length - 1] !== 0 || numIterations < originalDividendLength)
+  ) {
     let goingDown = 0;
     try {
       goingDown = arrayToNum(dividend, cutFrom, 1);
@@ -83,15 +92,20 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
       dividend.push(0);
       ++individualNumDecimals[0];
     }
-    rest.set(getKey(numIterations-1, cutFrom), goingDown);
+    rest.set(getKey(numIterations - 1, cutFrom), goingDown);
 
-    candidate = mapToNum(rest, numIterations -1, numIterations-1, cutLen);
+    candidate = mapToNum(rest, numIterations - 1, numIterations - 1, cutLen);
     if (candidate < divisorAll) {
-      candidate = mapToNum(rest, numIterations -1, numIterations-1, cutLen+1);
+      candidate = mapToNum(
+        rest,
+        numIterations - 1,
+        numIterations - 1,
+        cutLen + 1,
+      );
     }
 
     q = Math.floor(candidate / divisorAll);
-    r = candidate - q*divisorAll;
+    r = candidate - q * divisorAll;
     rests.push(r);
     rr = numToArray(r);
     while (rr.length < cutLen) {
@@ -103,19 +117,22 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
       rest.set(getKey(numIterations, i + numIterations), rr[i]);
     }
     ++numIterations;
-    
-    if (nthFromEnd(quotient, 0) === nthFromEnd(quotient, 1) &&
-      nthFromEnd(rests, 0) === nthFromEnd(rests, 1)) {
-        periodLength = 1;
-        //console.log(`period (${nthFromEnd(quotient, 0)})`);
-        break;
-    }
-    else if (nthFromEnd(quotient, 0) === nthFromEnd(quotient, 2) &&
+
+    if (
+      nthFromEnd(quotient, 0) === nthFromEnd(quotient, 1) &&
+      nthFromEnd(rests, 0) === nthFromEnd(rests, 1)
+    ) {
+      periodLength = 1;
+      //console.log(`period (${nthFromEnd(quotient, 0)})`);
+      break;
+    } else if (
+      nthFromEnd(quotient, 0) === nthFromEnd(quotient, 2) &&
       nthFromEnd(quotient, 1) === nthFromEnd(quotient, 3) &&
-      nthFromEnd(rests, 0) === nthFromEnd(rests, 2)) {
-        periodLength = 2;
-        //console.log(`period (${nthFromEnd(quotient, 1)}${nthFromEnd(quotient, 0)})`);
-        break;
+      nthFromEnd(rests, 0) === nthFromEnd(rests, 2)
+    ) {
+      periodLength = 2;
+      //console.log(`period (${nthFromEnd(quotient, 1)}${nthFromEnd(quotient, 0)})`);
+      break;
     }
     ++cutFrom;
   }
@@ -133,17 +150,17 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
     //for (let i = 0; i < periodLength; ++i) backTrack();
     --numIterations;
   }
-  if (quotient[quotient.length-1] === 0) backTrack();
+  if (quotient[quotient.length - 1] === 0) backTrack();
 
   //console.log('rest', rest);
   //console.log('rests', rests);
 
-  const cells:Cell[] = [];
-  const lines:Line[] = [];
+  const cells: Cell[] = [];
+  const lines: Line[] = [];
 
   // dividend
   for (let i = 0; i < dividend.length; ++i) {
-    cells.push({ pos: [- dividend.length + i, 0], value: dividend[i] });
+    cells.push({ pos: [-dividend.length + i, 0], value: dividend[i] });
   }
   if (individualNumDecimals[0] > 0) {
     cells.push({
@@ -173,19 +190,20 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
     cells.push({
       value: DECIMALS_SEPARATOR,
       pos: [quotient.length - 0.5 - sumDecimalPlaces, 1],
-      fill: RESULT_COLOR
+      fill: RESULT_COLOR,
     });
   }
-  if (periodLength) { // 1234,450 // 1234,33
+  if (periodLength) {
+    // 1234,450 // 1234,33
     cells.push({
       value: '(',
       pos: [quotient.length - 0.5 - periodLength, 1],
-      fill: RESULT_COLOR
+      fill: RESULT_COLOR,
     });
     cells.push({
       value: ')',
       pos: [quotient.length - 0.5, 1],
-      fill: RESULT_COLOR
+      fill: RESULT_COLOR,
     });
   }
 
@@ -194,7 +212,7 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
     for (let j = 0; j < numIterations; ++j) {
       const v = rest.get(getKey(j, i));
       if (v !== undefined) {
-        cells.push({ pos: [- dividend.length + i, j+1], value: v });
+        cells.push({ pos: [-dividend.length + i, j + 1], value: v });
       }
     }
   }
@@ -216,4 +234,4 @@ export function divide(divs:string[], options: { maxIterations: number } = { max
   });
 
   return { cells, lines };
-};
+}
